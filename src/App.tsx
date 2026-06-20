@@ -4,7 +4,7 @@ import {
   Truck, Shield, Phone, ArrowRight, Heart, Share2, Check, Minus, Plus,
   Award, Zap, Package, Users, ThumbsUp,
   Mail, CreditCard, Lock, RotateCcw,
-  Tag, Trash2, CheckCircle
+  Tag, Trash2, CheckCircle, User, EyeOff, Eye, LogIn
 } from 'lucide-react';
 import { products, categories, makes, years, getModelsForMake, searchProducts, IMAGES, type Product, type CartItem } from './data/store';
 import CRM from './components/CRM';
@@ -39,16 +39,33 @@ function Btn({ children, variant = 'primary', className = '', onClick, size = 'm
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   HEADER / NAVBAR
+   HEADER / NAVBAR with CRM Login
    ═══════════════════════════════════════════════════════════════════ */
-function Header({ cartCount, onCart, onSearch, onNav }: { cartCount: number; onCart: () => void; onSearch: () => void; onNav: (p: string) => void }) {
+function Header({ cartCount, onCart, onSearch, onNav, onCrmLogin }: { cartCount: number; onCart: () => void; onSearch: () => void; onNav: (p: string) => void; onCrmLogin: () => void }) {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [email, setEmail] = useState('admin@westarauto.com');
+  const [password, setPassword] = useState('admin123');
+  const [showPw, setShowPw] = useState(false);
+  const [loggingIn, setLoggingIn] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', h); return () => window.removeEventListener('scroll', h);
   }, []);
+
+  const handleLogin = () => {
+    setError('');
+    if (!email.trim() || !password.trim()) { setError('Please fill in all fields'); return; }
+    setLoggingIn(true);
+    setTimeout(() => {
+      setLoggingIn(false);
+      setLoginOpen(false);
+      onCrmLogin();
+    }, 1200);
+  };
 
   return (
     <>
@@ -86,13 +103,20 @@ function Header({ cartCount, onCart, onSearch, onNav }: { cartCount: number; onC
               </button>
             </nav>
 
-            {/* Search + Cart */}
-            <div className="flex items-center gap-2">
+            {/* Search + Cart + CRM Login */}
+            <div className="flex items-center gap-1 sm:gap-2">
               <button onClick={onSearch} className="p-2 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-xl transition-all"><Search size={18} /></button>
               <button onClick={onCart} className="relative p-2 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-xl transition-all">
                 <ShoppingCart size={18} />
                 {cartCount > 0 && <span className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-yellow-500 text-black text-[9px] font-black rounded-full flex items-center justify-center an-bounce">{cartCount}</span>}
               </button>
+
+              {/* CRM Login Button */}
+              <button onClick={() => setLoginOpen(true)} className="flex items-center gap-1.5 px-2 sm:px-3 py-2 text-neutral-400 hover:text-yellow-500 hover:bg-neutral-800/60 rounded-xl transition-all group" title="CRM Login">
+                <User size={18} />
+                <span className="hidden sm:inline text-xs font-bold">CRM</span>
+              </button>
+
               <button onClick={() => setMobileMenu(true)} className="lg:hidden p-2 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-xl"><Menu size={18} /></button>
             </div>
           </div>
@@ -111,6 +135,98 @@ function Header({ cartCount, onCart, onSearch, onNav }: { cartCount: number; onC
             {['Home', 'Shop All', 'Air Suspension', 'Brakes', 'Shocks & Struts', 'Sale'].map(item => (
               <button key={item} onClick={() => { onNav(item === 'Home' ? 'home' : 'shop'); setMobileMenu(false); }} className="w-full text-left px-3 py-3 text-sm font-semibold text-neutral-300 hover:text-yellow-500 hover:bg-neutral-900 rounded-xl transition-all">{item}</button>
             ))}
+            {/* CRM Login in mobile menu */}
+            <div className="border-t border-neutral-800 mt-4 pt-4">
+              <button onClick={() => { setMobileMenu(false); setLoginOpen(true); }} className="w-full flex items-center gap-3 px-3 py-3 text-sm font-bold text-yellow-500 hover:bg-yellow-500/10 rounded-xl transition-all">
+                <User size={18} /> CRM Dashboard Login
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═══ CRM LOGIN MODAL ═══ */}
+      {loginOpen && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 an-in" onClick={() => setLoginOpen(false)}>
+          <div className="absolute inset-0 bg-black/80 glass" />
+          <div className="relative w-full max-w-md an-scale" onClick={e => e.stopPropagation()}>
+            <div className="bg-neutral-950 border border-neutral-800 rounded-3xl overflow-hidden shadow-2xl shadow-yellow-500/5">
+
+              {/* Header */}
+              <div className="relative px-8 pt-8 pb-6 text-center border-b border-neutral-800 bg-gradient-to-b from-yellow-500/5 to-transparent">
+                <button onClick={() => setLoginOpen(false)} className="absolute top-4 right-4 p-2 text-neutral-500 hover:text-white hover:bg-neutral-800 rounded-xl transition-all"><X size={18} /></button>
+                <div className="w-14 h-14 bg-yellow-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-yellow-500/20">
+                  <Lock size={24} className="text-black" />
+                </div>
+                <h2 className="text-xl font-black text-white">CRM Dashboard</h2>
+                <p className="text-sm text-neutral-500 mt-1">Sign in to manage your operations</p>
+              </div>
+
+              {/* Form */}
+              <div className="px-8 py-6 space-y-4">
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-sm text-red-400 font-medium an-scale">{error}</div>
+                )}
+
+                <div>
+                  <label className="text-xs font-bold text-neutral-400 mb-2 block">Email Address</label>
+                  <div className="relative">
+                    <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
+                    <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                      placeholder="admin@westarauto.com"
+                      className="w-full pl-10 pr-4 py-3 bg-neutral-900 border border-neutral-700 rounded-xl text-sm text-white placeholder-neutral-600 outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 transition-all"
+                      onKeyDown={e => { if (e.key === 'Enter') handleLogin(); }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-neutral-400 mb-2 block">Password</label>
+                  <div className="relative">
+                    <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
+                    <input type={showPw ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      className="w-full pl-10 pr-12 py-3 bg-neutral-900 border border-neutral-700 rounded-xl text-sm text-white placeholder-neutral-600 outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 transition-all"
+                      onKeyDown={e => { if (e.key === 'Enter') handleLogin(); }}
+                    />
+                    <button onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-neutral-500 hover:text-neutral-300 transition-colors">
+                      {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" defaultChecked className="w-4 h-4 rounded bg-neutral-800 border-neutral-600 text-yellow-500 focus:ring-yellow-500/20" />
+                    <span className="text-xs text-neutral-500 group-hover:text-neutral-300 transition-colors">Remember me</span>
+                  </label>
+                  <button className="text-xs text-yellow-500 hover:text-yellow-400 font-semibold transition-colors">Forgot password?</button>
+                </div>
+
+                <button onClick={handleLogin} disabled={loggingIn}
+                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-sm rounded-xl transition-all disabled:opacity-60 shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/30 hover:-translate-y-0.5 active:translate-y-0">
+                  {loggingIn ? (
+                    <><svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> Signing in...</>
+                  ) : (
+                    <><LogIn size={16} /> Sign In to CRM</>
+                  )}
+                </button>
+              </div>
+
+              {/* Footer */}
+              <div className="px-8 py-4 border-t border-neutral-800 bg-neutral-950/50">
+                <p className="text-xs text-neutral-600 text-center flex items-center justify-center gap-1.5">
+                  <Lock size={10} /> Protected by 256-bit SSL encryption
+                </p>
+                <div className="flex items-center justify-center gap-4 mt-2">
+                  <span className="text-[10px] text-neutral-700">Cloudflare</span>
+                  <span className="text-[10px] text-neutral-700">•</span>
+                  <span className="text-[10px] text-neutral-700">Let's Encrypt</span>
+                  <span className="text-[10px] text-neutral-700">•</span>
+                  <span className="text-[10px] text-neutral-700">SOC 2</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -819,7 +935,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans">
-      <Header cartCount={cartCount} onCart={() => setCartOpen(true)} onSearch={() => setSearchOpen(true)} onNav={nav} />
+      <Header cartCount={cartCount} onCart={() => setCartOpen(true)} onSearch={() => setSearchOpen(true)} onNav={nav} onCrmLogin={() => nav('crm')} />
 
       {page === 'home' && <HomePage onSearch={(y, m, md) => handleSearch(y, m, md)} onViewProduct={viewProduct} onAdd={id => { addToCart(id); setCartOpen(true); }} onShop={goShop} />}
       {page === 'shop' && <ShopPage results={shopResults} query={shopQuery} onViewProduct={viewProduct} onAdd={id => { addToCart(id); setCartOpen(true); }} onSearch={(y, m, md, q) => handleSearch(y, m, md, q)} />}
@@ -827,14 +943,6 @@ export default function App() {
       {page === 'checkout-success' && <CheckoutSuccess onHome={() => nav('home')} />}
 
       <Footer onNav={nav} />
-
-      {/* CRM Access Button - Fixed */}
-      <button onClick={() => nav('crm')} className="fixed bottom-6 right-6 z-40 bg-yellow-500 text-black p-3.5 rounded-2xl shadow-2xl shadow-yellow-500/20 hover:bg-yellow-400 hover:scale-110 transition-all an-glow group" title="Open CRM">
-        <Users size={20} />
-        <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-neutral-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg border border-neutral-700 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-          Open CRM Dashboard
-        </span>
-      </button>
 
       {cartOpen && <CartDrawer items={cartItems} onClose={() => setCartOpen(false)} onUpdateQty={updateQty} onRemove={removeFromCart} onCheckout={handleCheckout} />}
       {searchOpen && <SearchOverlay onClose={() => setSearchOpen(false)} onResult={handleSearchResult} />}
