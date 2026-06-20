@@ -81,7 +81,7 @@ export default function CatalogProducts() {
                   { key: null, label: 'Status', align: 'center' },
                   { key: null, label: '', align: 'center' },
                 ].map((h, i) => (
-                  <th key={i} onClick={() => h.key && toggleSort(h.key)} className={`px-2 sm:px-3 py-2.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${h.key ? 'cursor-pointer' : ''}`}
+                  <th key={i} onClick={() => h.key && toggleSort(h.key)} className={`px-2 sm:px-3 py-3 text-xs font-bold uppercase tracking-wider ${h.key ? 'cursor-pointer' : ''}`}
                     style={{ color: t.textMuted, textAlign: h.align as 'left' | 'right' | 'center' }}>
                     <span className="inline-flex items-center gap-1">{h.label}{h.key && <ArrowUpDown size={8} />}</span>
                   </th>
@@ -96,16 +96,16 @@ export default function CatalogProducts() {
                     onMouseLeave={e => { if (p.id !== selectedId) (e.currentTarget).style.background = 'transparent'; }}>
                     <td className="px-2 sm:px-3 py-2">
                       <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: t.border }}><Package size={12} style={{ color: t.textMuted }} /></div>
-                        <div className="min-w-0"><p className="text-[11px] font-bold truncate max-w-[120px] sm:max-w-[180px]" style={{ color: t.text }}>{p.name}</p><p className="text-[8px] sm:text-[9px] truncate" style={{ color: t.textMuted }}>{p.brand}</p></div>
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: t.border }}><Package size={14} style={{ color: t.textMuted }} /></div>
+                        <div className="min-w-0"><p className="text-sm font-bold truncate max-w-[120px] sm:max-w-[200px]" style={{ color: t.text }}>{p.name}</p><p className="text-xs truncate" style={{ color: t.textMuted }}>{p.brand}</p></div>
                       </div>
                     </td>
                     <td className="px-2 sm:px-3 py-2"><button onClick={e => { e.stopPropagation(); setCopiedSku(p.sku); setTimeout(() => setCopiedSku(null), 1200); }} className="flex items-center gap-1">
-                      <span className="text-[10px] font-mono" style={{ color: t.textMuted }}>{p.sku}</span>{copiedSku === p.sku ? <CheckCircle2 size={8} style={{ color: t.success }} /> : <Copy size={8} style={{ color: t.textMuted }} />}
+                      <span className="text-xs font-mono" style={{ color: t.textMuted }}>{p.sku}</span>{copiedSku === p.sku ? <CheckCircle2 size={11} style={{ color: t.success }} /> : <Copy size={11} style={{ color: t.textMuted }} />}
                     </button></td>
-                    <td className="px-2 sm:px-3 py-2 text-right"><span className="text-[11px] font-bold" style={{ color: t.text }}>${p.price}</span></td>
-                    <td className="px-2 sm:px-3 py-2 text-right"><span className="text-[11px] font-bold" style={{ color: p.stock === 0 ? t.danger : p.stock < 50 ? t.warning : t.text }}>{p.stock}</span></td>
-                    <td className="px-2 sm:px-3 py-2"><div className="flex items-center justify-center gap-1"><div className="w-8 sm:w-10"><ProgressBar value={p.aiScore} color={p.aiScore >= 90 ? t.success : p.aiScore >= 75 ? t.warning : t.danger} /></div><span className="text-[9px] font-bold" style={{ color: p.aiScore >= 90 ? t.success : p.aiScore >= 75 ? t.warning : t.danger }}>{p.aiScore}</span></div></td>
+                    <td className="px-2 sm:px-3 py-2.5 text-right"><span className="text-sm font-bold" style={{ color: t.text }}>${p.price}</span></td>
+                    <td className="px-2 sm:px-3 py-2.5 text-right"><span className="text-sm font-bold" style={{ color: p.stock === 0 ? t.danger : p.stock < 50 ? t.warning : t.text }}>{p.stock}</span></td>
+                    <td className="px-2 sm:px-3 py-2.5"><div className="flex items-center justify-center gap-1.5"><div className="w-10 sm:w-12"><ProgressBar value={p.aiScore} color={p.aiScore >= 90 ? t.success : p.aiScore >= 75 ? t.warning : t.danger} /></div><span className="text-xs font-bold" style={{ color: p.aiScore >= 90 ? t.success : p.aiScore >= 75 ? t.warning : t.danger }}>{p.aiScore}</span></div></td>
                     <td className="px-2 sm:px-3 py-2 text-center"><Badge color={p.status === 'active' ? 'success' : p.status === 'draft' ? 'warning' : 'danger'}>{p.status}</Badge></td>
                     <td className="px-2 sm:px-3 py-2">
                       <div className="flex items-center justify-center gap-0.5" onClick={e => e.stopPropagation()}>
@@ -128,21 +128,21 @@ export default function CatalogProducts() {
             <div className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-[340px] lg:static lg:w-auto an-slide overflow-y-auto" style={{ background: t.card }}>
               <Card className="p-4 space-y-4 h-full lg:max-h-[calc(100vh-180px)] overflow-y-auto border-0 lg:border rounded-none lg:rounded-2xl">
                 <div className="flex items-start justify-between">
-                  <div className="min-w-0"><h3 className="text-sm font-bold truncate" style={{ color: t.text }}>{detail.name}</h3><p className="text-[10px] font-mono mt-0.5" style={{ color: t.textMuted }}>{detail.sku}</p></div>
+                  <div className="min-w-0"><h3 className="text-base font-bold truncate" style={{ color: t.text }}>{detail.name}</h3><p className="text-xs font-mono mt-0.5" style={{ color: t.textMuted }}>{detail.sku}</p></div>
                   <button onClick={() => setSelectedId(null)} className="p-1.5 rounded-lg flex-shrink-0" style={{ color: t.textMuted }} onMouseEnter={e=>(e.currentTarget).style.background=t.border} onMouseLeave={e=>(e.currentTarget).style.background='transparent'}><X size={14} /></button>
                 </div>
                 <div className="rounded-xl p-3" style={{ background: t.accentBg, border: `1px solid ${t.border}` }}>
-                  <div className="flex items-center justify-between mb-1.5"><span className="text-[10px] font-bold" style={{ color: t.textSecondary }}>AI Quality</span><span className="text-lg font-extrabold" style={{ color: t.accent }}>{detail.aiScore}<span className="text-xs" style={{ color: t.textMuted }}>/100</span></span></div>
+                  <div className="flex items-center justify-between mb-1.5"><span className="text-xs font-bold" style={{ color: t.textSecondary }}>AI Quality</span><span className="text-xl font-extrabold" style={{ color: t.accent }}>{detail.aiScore}<span className="text-sm" style={{ color: t.textMuted }}>/100</span></span></div>
                   <ProgressBar value={detail.aiScore} color={detail.aiScore >= 90 ? t.success : detail.aiScore >= 75 ? t.warning : t.danger} />
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   {[{ l: 'Retail', v: `$${detail.price}` }, { l: 'Wholesale', v: `$${detail.wholesalePrice}` }, { l: 'Cost', v: `$${detail.cost}` }].map(x => (
-                    <div key={x.l} className="rounded-lg p-2 text-center" style={{ background: t.border }}><p className="text-xs font-bold" style={{ color: t.text }}>{x.v}</p><p className="text-[9px]" style={{ color: t.textMuted }}>{x.l}</p></div>
+                    <div key={x.l} className="rounded-lg p-2.5 text-center" style={{ background: t.border }}><p className="text-sm font-bold" style={{ color: t.text }}>{x.v}</p><p className="text-xs" style={{ color: t.textMuted }}>{x.l}</p></div>
                   ))}
                 </div>
-                <div><h4 className="text-[10px] font-bold uppercase mb-1.5" style={{ color: t.textMuted }}>Fitment ({detail.fitment.length})</h4>
-                  <div className="space-y-0.5 max-h-24 overflow-y-auto">
-                    {detail.fitment.map((f, i) => <p key={i} className="text-[10px] py-0.5 px-2 rounded" style={{ color: t.textSecondary }}>{f.year} {f.make} {f.model} {f.engine}</p>)}
+                <div><h4 className="text-xs font-bold uppercase mb-2" style={{ color: t.textMuted }}>Fitment ({detail.fitment.length})</h4>
+                  <div className="space-y-0.5 max-h-28 overflow-y-auto">
+                    {detail.fitment.map((f, i) => <p key={i} className="text-xs py-1 px-2 rounded" style={{ color: t.textSecondary }}>{f.year} {f.make} {f.model} {f.engine}</p>)}
                   </div>
                 </div>
                 <div className="flex gap-2 pt-2" style={{ borderTop: `1px solid ${t.border}` }}>

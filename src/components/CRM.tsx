@@ -41,7 +41,7 @@ function CRMInner({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: t.bg, color: t.text }}>
+    <div className="crm-scale flex h-screen overflow-hidden" style={{ background: t.bg, color: t.text }}>
       <CRMSidebar activeSection={section} onNavigate={setSection} onBack={onBack} />
       <main className="flex-1 overflow-y-auto">
         <div className="p-5 lg:p-7 max-w-[1400px]" key={section}>

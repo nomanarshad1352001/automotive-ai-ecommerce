@@ -61,49 +61,49 @@ export default function Dashboard({ onNavigate }: { onNavigate?: (s: string) => 
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Card className="p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-bold flex items-center gap-2" style={{ color: t.text }}><Zap size={13} style={{ color: t.accent }} /> AI Tasks</h3>
-            <button onClick={() => onNavigate?.('automation-tasks')} className="text-[10px] font-bold flex items-center gap-1" style={{ color: t.accent }}><ExternalLink size={9} /> All</button>
+        <Card className="p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-bold flex items-center gap-2" style={{ color: t.text }}><Zap size={15} style={{ color: t.accent }} /> AI Tasks</h3>
+            <button onClick={() => onNavigate?.('automation-tasks')} className="text-xs font-bold flex items-center gap-1" style={{ color: t.accent }}><ExternalLink size={11} /> All</button>
           </div>
           {aiTasks.slice(0, 5).map(task => (
-            <div key={task.id} className="flex items-center gap-2.5 py-1.5 px-2 rounded-lg cursor-pointer" style={{ }} onMouseEnter={e=>(e.currentTarget).style.background=t.border} onMouseLeave={e=>(e.currentTarget).style.background='transparent'}>
-              <div className={`w-2 h-2 rounded-full flex-shrink-0 ${task.status==='running'?'an-pulse':''}`} style={{ background: task.status==='running'?t.info:task.status==='completed'?t.success:task.status==='failed'?t.danger:t.textMuted }} />
+            <div key={task.id} className="flex items-center gap-3 py-2 px-2 rounded-lg cursor-pointer" onMouseEnter={e=>(e.currentTarget).style.background=t.border} onMouseLeave={e=>(e.currentTarget).style.background='transparent'}>
+              <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${task.status==='running'?'an-pulse':''}`} style={{ background: task.status==='running'?t.info:task.status==='completed'?t.success:task.status==='failed'?t.danger:t.textMuted }} />
               <div className="flex-1 min-w-0">
-                <p className="text-[11px] font-semibold truncate" style={{ color: t.textSecondary }}>{task.type}</p>
-                <div className="flex items-center gap-1.5 mt-1"><div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: t.border }}><div className="h-full rounded-full" style={{ width: `${task.progress}%`, background: task.status==='completed'?t.success:task.status==='failed'?t.danger:t.accent }} /></div><span className="text-[9px] font-bold" style={{ color: t.textMuted }}>{task.progress}%</span></div>
+                <p className="text-sm font-semibold truncate" style={{ color: t.textSecondary }}>{task.type}</p>
+                <div className="flex items-center gap-2 mt-1.5"><div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: t.border }}><div className="h-full rounded-full" style={{ width: `${task.progress}%`, background: task.status==='completed'?t.success:task.status==='failed'?t.danger:t.accent }} /></div><span className="text-xs font-bold" style={{ color: t.textMuted }}>{task.progress}%</span></div>
               </div>
             </div>
           ))}
         </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-bold flex items-center gap-2" style={{ color: t.text }}><ShoppingCart size={13} style={{ color: t.accent }} /> Recent Orders</h3>
-            <button onClick={() => onNavigate?.('orders')} className="text-[10px] font-bold flex items-center gap-1" style={{ color: t.accent }}><ExternalLink size={9} /> All</button>
+        <Card className="p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-bold flex items-center gap-2" style={{ color: t.text }}><ShoppingCart size={15} style={{ color: t.accent }} /> Recent Orders</h3>
+            <button onClick={() => onNavigate?.('orders')} className="text-xs font-bold flex items-center gap-1" style={{ color: t.accent }}><ExternalLink size={11} /> All</button>
           </div>
           {orders.slice(0, 6).map(o => (
-            <div key={o.id} className="flex items-center justify-between py-1.5 px-2 rounded-lg cursor-pointer" onMouseEnter={e=>(e.currentTarget).style.background=t.border} onMouseLeave={e=>(e.currentTarget).style.background='transparent'}>
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ background: t.accentBg, color: t.accentText }}>{o.channel==='westarauto.com'?'DTC':o.channel.slice(0,3).toUpperCase()}</span>
-                <span className="text-[11px] truncate" style={{ color: t.textSecondary }}>{o.customer}</span>
+            <div key={o.id} className="flex items-center justify-between py-2 px-2 rounded-lg cursor-pointer" onMouseEnter={e=>(e.currentTarget).style.background=t.border} onMouseLeave={e=>(e.currentTarget).style.background='transparent'}>
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="text-xs font-bold px-2 py-0.5 rounded" style={{ background: t.accentBg, color: t.accentText }}>{o.channel==='westarauto.com'?'DTC':o.channel.slice(0,3).toUpperCase()}</span>
+                <span className="text-sm truncate" style={{ color: t.textSecondary }}>{o.customer}</span>
               </div>
-              <span className="text-[11px] font-bold" style={{ color: t.text }}>${o.total.toLocaleString()}</span>
+              <span className="text-sm font-bold" style={{ color: t.text }}>${o.total.toLocaleString()}</span>
             </div>
           ))}
         </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-bold flex items-center gap-2" style={{ color: t.text }}><AlertTriangle size={13} style={{ color: t.danger }} /> Alerts</h3>
-            <button onClick={() => onNavigate?.('inventory-alerts')} className="text-[10px] font-bold flex items-center gap-1" style={{ color: t.accent }}><ExternalLink size={9} /> All</button>
+        <Card className="p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-bold flex items-center gap-2" style={{ color: t.text }}><AlertTriangle size={15} style={{ color: t.danger }} /> Alerts</h3>
+            <button onClick={() => onNavigate?.('inventory-alerts')} className="text-xs font-bold flex items-center gap-1" style={{ color: t.accent }}><ExternalLink size={11} /> All</button>
           </div>
           {inventoryAlerts.slice(0, 5).map(a => (
-            <div key={a.id} className="flex items-start gap-2.5 py-1.5 px-2 rounded-lg cursor-pointer" onMouseEnter={e=>(e.currentTarget).style.background=t.border} onMouseLeave={e=>(e.currentTarget).style.background='transparent'}>
-              <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: a.priority==='high'?t.danger:a.priority==='medium'?t.warning:t.info }} />
+            <div key={a.id} className="flex items-start gap-3 py-2 px-2 rounded-lg cursor-pointer" onMouseEnter={e=>(e.currentTarget).style.background=t.border} onMouseLeave={e=>(e.currentTarget).style.background='transparent'}>
+              <span className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: a.priority==='high'?t.danger:a.priority==='medium'?t.warning:t.info }} />
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-semibold truncate" style={{ color: t.textSecondary }}>{a.productName}</p>
-                <p className="text-[9px] mt-0.5" style={{ color: t.textMuted }}>{a.alertType} · {a.currentStock} units</p>
+                <p className="text-sm font-semibold truncate" style={{ color: t.textSecondary }}>{a.productName}</p>
+                <p className="text-xs mt-0.5" style={{ color: t.textMuted }}>{a.alertType} · {a.currentStock} units</p>
               </div>
             </div>
           ))}
